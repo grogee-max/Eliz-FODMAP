@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FODMAP Guide">
+<title>Elizabeth's FODMAP Guide</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;font-family:Avenir,"Trebuchet MS",system-ui,sans-serif;background:#fff;color:#1e293b}
+body{display:flex;flex-direction:column;max-width:480px;margin:0 auto}
+.hdr{background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:20px 16px 16px;color:#fff;flex-shrink:0}
+.hdr-sub{font-size:13px;font-weight:600;opacity:.8;letter-spacing:1px;text-transform:uppercase}
+.hdr-title{font-size:24px;font-weight:900;letter-spacing:-.5px}
+.hdr-count{font-size:12px;opacity:.7;margin-top:2px}
+.search-wrap{margin-top:12px;position:relative}
+.search-wrap input{width:100%;padding:10px 14px 10px 36px;border-radius:10px;border:none;font-size:15px;background:rgba(255,255,255,.15);color:#fff;outline:none;font-family:inherit;box-sizing:border-box}
+.search-wrap input::placeholder{color:rgba(255,255,255,.5)}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:16px;opacity:.6}
+.cat-bar{padding:8px 16px;border-bottom:1px solid #f1f5f9;background:#fafafe;flex-shrink:0}
+.cat-toggle{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:6px 14px;font-size:13px;font-weight:600;color:#475569;cursor:pointer;width:100%;text-align:left;display:flex;justify-content:space-between;align-items:center;font-family:inherit}
+.cat-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;padding-bottom:4px}
+.cat-pill{padding:5px 10px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;border:1px solid #e2e8f0;background:#fff;color:#64748b}
+.cat-pill.on{border:2px solid #6366f1;background:#eef2ff;color:#4f46e5}
+.filters{display:flex;gap:6px;padding:8px 16px;border-bottom:1px solid #f1f5f9;flex-shrink:0}
+.fbtn{flex:1;padding:6px 0;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;text-align:center;border:1px solid #e2e8f0;background:#fff;color:#94a3b8}
+.fbtn.on{border-width:2px}
+.list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.row{display:flex;align-items:center;width:100%;padding:12px 16px;border:none;border-bottom:1px solid #f8fafc;cursor:pointer;text-align:left;gap:12px;font-family:inherit;background:#fff}
+.row:nth-child(even){background:#fafafe}
+.dot{width:10px;height:10px;border-radius:5px;flex-shrink:0}
+.row-name{font-size:14px;font-weight:600;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row-serve{font-size:11px;color:#94a3b8;margin-top:1px}
+.row-arr{font-size:10px;color:#cbd5e1}
+.footer{padding:10px 16px;border-top:1px solid #f1f5f9;background:#fafafe;text-align:center;flex-shrink:0}
+.footer div{font-size:10px;color:#94a3b8}
+.detail{padding:16px;overflow-y:auto;flex:1}
+.back-btn{background:none;border:none;color:#6366f1;font-size:15px;font-weight:600;cursor:pointer;padding:8px 0;display:flex;align-items:center;gap:4px;font-family:inherit}
+.detail-card{border-radius:16px;padding:20px;margin-top:8px}
+.detail-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.detail-emoji{font-size:28px}
+.detail-name{font-size:20px;font-weight:800;color:#1e293b}
+.detail-rating{font-size:13px;font-weight:700;margin-top:2px}
+.detail-cat{font-size:13px;color:#64748b;margin-bottom:4px}
+.detail-serve{font-size:14px;color:#334155;margin-top:8px}
+.detail-notes{font-size:13px;color:#64748b;margin-top:6px;font-style:italic}
+.breakdown{margin-top:20px;background:#f8fafc;border-radius:12px;padding:16px;border:1px solid #e2e8f0}
+.breakdown-title{font-size:14px;font-weight:700;color:#334155;margin-bottom:12px}
+.brow{display:flex;justify-content:space-between;align-items:center;padding:8px 0}
+.brow+.brow{border-top:1px solid #f1f5f9}
+.brow-label{font-size:13px;color:#475569;font-weight:500}
+.dots{display:flex;gap:3px;align-items:center}
+.dots span{width:9px;height:9px;border-radius:3px;background:#e2e8f0}
+.dots span.on1{background:#d97706}
+.dots span.on2,.dots span.on3{background:#dc2626}
+.disclaimer{margin-top:16px;padding:12px;background:#eff6ff;border-radius:10px;border:1px solid #bfdbfe}
+.disclaimer b{font-size:11px;color:#3b82f6;font-weight:600;display:block;margin-bottom:4px}
+.disclaimer p{font-size:11px;color:#64748b;line-height:1.5;margin:0}
+.empty{padding:40px;text-align:center;color:#94a3b8;font-size:14px}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<div class="hdr" id="hdr">
+  <div class="hdr-sub">Elizabeth's</div>
+  <div class="hdr-title">FODMAP Guide</div>
+  <div class="hdr-count" id="total-count"></div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input id="search" placeholder="Search foods..." autocomplete="off" autocorrect="off" spellcheck="false">
+  </div>
+</div>
+
+<div class="cat-bar" id="cat-bar">
+  <button class="cat-toggle" id="cat-toggle"><span id="cat-label">All Categories</span><span id="cat-arrow">▼</span></button>
+  <div class="cat-list hidden" id="cat-list"></div>
+</div>
+
+<div class="filters" id="filters"></div>
+
+<div class="list" id="list"></div>
+
+<div class="footer" id="list-footer"><div>For educational purposes only. Always consult a healthcare professional.</div></div>
+
+<!-- Detail view -->
+<div class="detail hidden" id="detail"></div>
+
+<script>
+const D=[
+["Alfalfa Sprouts","V","g","1 cup (33g)","","0,0,0,0"],
+["Artichoke (Globe)","V","r","","High in fructans","3,1,0,0"],
+["Artichoke (Jerusalem)","V","r","","Very high in fructans","3,0,0,0"],
+["Arugula (Rocket)","V","g","1 cup (20g)","","0,0,0,0"],
+["Asparagus","V","r","","High in fructans","2,1,0,0"],
+["Aubergine (Eggplant)","V","g","1 cup (75g)","","0,0,0,0"],
+["Bamboo Shoots (Canned)","V","g","1 cup (120g)","","0,0,0,0"],
+["Bean Sprouts","V","g","½ cup (40g)","","0,0,0,0"],
+["Beetroot (Fresh)","V","a","2 slices (30g)","Low in small amounts","2,0,0,0"],
+["Beetroot (Canned)","V","a","2 slices (30g)","Low in small amounts","1,0,0,0"],
+["Bell Pepper (Green)","V","g","½ cup (52g)","","0,0,0,0"],
+["Bell Pepper (Red)","V","g","½ cup (52g)","","0,0,0,0"],
+["Bell Pepper (Yellow)","V","g","½ cup (52g)","","0,0,0,0"],
+["Bok Choy","V","g","1 cup (75g)","","0,0,0,0"],
+["Broccoli","V","a","¾ cup (75g)","Fructans in larger serves","1,0,0,0"],
+["Brussels Sprouts","V","a","2 sprouts (40g)","Moderate fructans","2,0,0,0"],
+["Butternut Squash","V","a","¼ cup (50g)","Low in small amounts","1,1,0,0"],
+["Cabbage (Common)","V","g","1 cup (75g)","","0,0,0,0"],
+["Cabbage (Red)","V","g","1 cup (75g)","","0,0,0,0"],
+["Cabbage (Savoy)","V","a","½ cup (45g)","Low in small serves","1,0,0,0"],
+["Carrot","V","g","1 medium (61g)","","0,0,0,0"],
+["Cassava","V","g","½ cup (95g)","","0,0,0,0"],
+["Cauliflower","V","a","¼ cup (50g)","Polyols in larger serves","0,0,2,0"],
+["Celeriac","V","a","½ cup (60g)","Moderate fructans","1,0,0,0"],
+["Celery","V","a","¼ stalk (10g)","Low in very small amounts","0,0,2,0"],
+["Chayote","V","g","½ cup (66g)","","0,0,0,0"],
+["Chilli","V","g","1 chilli (14g)","","0,0,0,0"],
+["Chives","V","g","1 tbsp (3g)","","0,0,0,0"],
+["Collard Greens","V","g","1 cup (36g)","","0,0,0,0"],
+["Corn (Sweet)","V","a","½ cob (38g)","Low in small amounts","0,0,1,0"],
+["Courgette (Zucchini)","V","g","⅔ cup (65g)","","0,0,0,0"],
+["Cucumber","V","g","1 cup (75g)","","0,0,0,0"],
+["Endive","V","g","4 leaves (25g)","","0,0,0,0"],
+["Fennel (Bulb)","V","a","½ cup (48g)","Fructans in larger serves","2,0,0,0"],
+["Garlic","V","r","","Very high in fructans. Use garlic-infused oil","3,0,0,0"],
+["Ginger","V","g","1 tsp (5g)","","0,0,0,0"],
+["Green Beans","V","g","12 beans (75g)","","0,0,0,0"],
+["Kale","V","g","1 cup (20g)","","0,0,0,0"],
+["Leek (Green Part Only)","V","g","½ cup (30g)","Green leaves only","0,0,0,0"],
+["Leek (White Part)","V","r","","High in fructans","3,0,0,0"],
+["Lettuce (All Types)","V","g","2 cups (60g)","","0,0,0,0"],
+["Mushroom (All Types)","V","r","","High in polyols (mannitol)","0,0,3,0"],
+["Okra","V","g","6 pods (60g)","","0,0,0,0"],
+["Olive","V","g","15 olives (30g)","","0,0,0,0"],
+["Onion (All Types)","V","r","","Very high in fructans","3,0,0,0"],
+["Onion (Spring - Green Part)","V","g","2 tbsp (12g)","Green part only","0,0,0,0"],
+["Onion Powder","V","r","","Concentrated fructans","3,0,0,0"],
+["Parsnip","V","g","½ cup (65g)","","0,0,0,0"],
+["Peas (Green)","V","a","¼ cup (35g)","GOS in larger serves","1,0,0,0"],
+["Peas (Snow/Mangetout)","V","a","5 pods (15g)","Low in small amounts","1,0,1,0"],
+["Peas (Sugar Snap)","V","a","5 pods (28g)","Low in small amounts","1,0,0,0"],
+["Potato","V","g","1 medium (150g)","","0,0,0,0"],
+["Pumpkin","V","a","¼ cup (50g)","Low in small amounts","1,1,0,0"],
+["Radish","V","g","3 radishes (30g)","","0,0,0,0"],
+["Shallot","V","r","","High in fructans","3,0,0,0"],
+["Silverbeet (Swiss Chard)","V","g","1 cup (36g)","","0,0,0,0"],
+["Spinach (Baby)","V","g","2 cups (60g)","","0,0,0,0"],
+["Squash (Spaghetti)","V","g","1 cup (100g)","","0,0,0,0"],
+["Swede (Rutabaga)","V","g","½ cup (60g)","","0,0,0,0"],
+["Sweet Potato","V","a","½ cup (70g)","Low in small amounts","1,1,1,0"],
+["Taro","V","g","½ cup (60g)","","0,0,0,0"],
+["Tomato (Fresh)","V","g","1 medium (75g)","","0,0,0,0"],
+["Tomato (Canned)","V","g","½ cup (100g)","","0,0,0,0"],
+["Tomato (Sun-dried)","V","a","2 pieces (5g)","Fructose in larger serves","0,1,0,0"],
+["Tomato Paste","V","g","2 tbsp (30g)","","0,0,0,0"],
+["Turnip","V","g","½ cup (65g)","","0,0,0,0"],
+["Water Chestnuts","V","g","½ cup (50g)","","0,0,0,0"],
+["Watercress","V","g","1 cup (34g)","","0,0,0,0"],
+["Yam","V","g","½ cup (75g)","","0,0,0,0"],
+["Apple","F","r","","High in fructose and sorbitol","0,3,3,0"],
+["Apricot (Fresh)","F","a","1 small (30g)","Contains sorbitol","0,0,2,0"],
+["Apricot (Dried)","F","r","","High in fructose and sorbitol","0,2,3,0"],
+["Avocado","F","a","⅛ avocado (20g)","Low in small amounts","0,0,2,0"],
+["Banana (Unripe)","F","g","1 medium (100g)","","0,0,0,0"],
+["Banana (Ripe)","F","a","⅓ medium (33g)","Riper = more fructans","1,0,0,0"],
+["Blackberry","F","r","","High in polyols","0,1,3,0"],
+["Blueberry","F","g","20 berries (40g)","","0,0,0,0"],
+["Cantaloupe","F","g","½ cup (90g)","","0,0,0,0"],
+["Cherry","F","r","","High in sorbitol and fructose","0,2,3,0"],
+["Clementine","F","g","1 medium (75g)","","0,0,0,0"],
+["Coconut (Fresh)","F","g","½ cup (40g)","","0,0,0,0"],
+["Cranberry","F","g","1 tbsp (15g)","","0,0,0,0"],
+["Date (Dried)","F","r","","High in fructose","0,3,0,0"],
+["Dragon Fruit","F","g","1 small (120g)","","0,0,0,0"],
+["Fig (Fresh/Dried)","F","r","","High in fructose","0,3,0,0"],
+["Grape","F","g","10 grapes (50g)","","0,0,0,0"],
+["Grapefruit","F","a","½ medium (80g)","Fructans in larger serves","1,0,0,0"],
+["Guava","F","a","½ guava (50g)","Fructose in larger serves","0,1,0,0"],
+["Honeydew Melon","F","g","½ cup (90g)","","0,0,0,0"],
+["Kiwi Fruit","F","g","2 small (150g)","","0,0,0,0"],
+["Lemon","F","g","1 medium","","0,0,0,0"],
+["Lime","F","g","1 medium","","0,0,0,0"],
+["Lychee","F","a","5 fruits (50g)","Sorbitol and fructose in larger serves","0,1,1,0"],
+["Mandarin","F","g","1 medium (80g)","","0,0,0,0"],
+["Mango","F","a","½ cup (60g)","Fructose in larger serves","0,2,0,0"],
+["Nectarine","F","r","","High in sorbitol","0,0,3,0"],
+["Orange","F","g","1 medium (130g)","","0,0,0,0"],
+["Papaya","F","g","1 cup (140g)","","0,0,0,0"],
+["Passion Fruit","F","g","2 fruits (36g)","","0,0,0,0"],
+["Peach","F","r","","High in sorbitol","0,0,3,0"],
+["Pear","F","r","","High in fructose and sorbitol","0,3,3,0"],
+["Persimmon","F","r","","High in fructose","0,3,0,0"],
+["Pineapple","F","g","1 cup (140g)","","0,0,0,0"],
+["Plum","F","a","1 small (60g)","Sorbitol in larger serves","0,0,1,0"],
+["Pomegranate Seeds","F","a","¼ cup (35g)","Fructose in larger serves","0,1,0,0"],
+["Prune","F","r","","Very high in sorbitol","0,0,3,0"],
+["Raisins/Sultanas","F","a","1 tbsp (13g)","Low in small amounts","0,2,0,0"],
+["Raspberry","F","g","30 berries (60g)","","0,0,0,0"],
+["Rhubarb","F","g","1 cup (120g)","","0,0,0,0"],
+["Strawberry","F","g","5 medium (100g)","","0,0,0,0"],
+["Watermelon","F","r","","High in fructose and mannitol","1,3,2,0"],
+["Bread (Gluten Free)","G","g","2 slices","","0,0,0,0"],
+["Bread (Sourdough Spelt)","G","g","2 slices (90g)","","0,0,0,0"],
+["Bread (Sourdough Wheat)","G","g","2 slices (90g)","Long fermentation reduces fructans","0,0,0,0"],
+["Bread (White Wheat)","G","a","1 slice (35g)","Fructans in larger serves","1,0,0,0"],
+["Bread (Wholemeal)","G","a","1 slice (35g)","Contains fructans","2,0,0,0"],
+["Buckwheat","G","g","¼ cup dry (40g)","Naturally gluten free","0,0,0,0"],
+["Cereal (Corn Flakes)","G","g","½ cup (30g)","","0,0,0,0"],
+["Cereal (Oat Porridge)","G","g","½ cup dry (52g)","","0,0,0,0"],
+["Corn Tortilla","G","g","1 tortilla (30g)","","0,0,0,0"],
+["Cornflour","G","g","2 tbsp","","0,0,0,0"],
+["Couscous","G","a","½ cup cooked (70g)","Contains fructans","2,0,0,0"],
+["Flour (Buckwheat)","G","g","¼ cup (30g)","","0,0,0,0"],
+["Flour (Coconut)","G","g","¼ cup (28g)","","0,0,0,0"],
+["Flour (Corn/Maize)","G","g","¼ cup (30g)","","0,0,0,0"],
+["Flour (Gram/Chickpea)","G","a","⅓ cup (35g)","GOS in larger serves","1,0,0,0"],
+["Flour (Oat)","G","g","¼ cup (30g)","","0,0,0,0"],
+["Flour (Plain White)","G","a","¼ cup (30g)","Contains fructans","1,0,0,0"],
+["Flour (Rice)","G","g","¼ cup (40g)","","0,0,0,0"],
+["Flour (Tapioca)","G","g","¼ cup (30g)","","0,0,0,0"],
+["Millet","G","g","¼ cup dry (50g)","","0,0,0,0"],
+["Noodles (Rice)","G","g","1 cup cooked","","0,0,0,0"],
+["Oats","G","g","½ cup dry (52g)","","0,0,0,0"],
+["Pasta (Gluten Free)","G","g","1 cup cooked","","0,0,0,0"],
+["Pasta (Wheat)","G","a","1 cup cooked","Al dente is lower FODMAP","2,0,0,0"],
+["Polenta","G","g","1 cup cooked","","0,0,0,0"],
+["Popcorn","G","g","4 cups popped","","0,0,0,0"],
+["Quinoa","G","g","1 cup cooked","","0,0,0,0"],
+["Rice (All Types)","G","g","1 cup cooked","","0,0,0,0"],
+["Rice Cakes","G","g","2 cakes (18g)","","0,0,0,0"],
+["Tapioca","G","g","½ cup (75g)","","0,0,0,0"],
+["Wheat Bran","G","r","","High in fructans","3,0,0,0"],
+["Beef","P","g","Any serve","","0,0,0,0"],
+["Chicken","P","g","Any serve","","0,0,0,0"],
+["Crab","P","g","Any serve","","0,0,0,0"],
+["Duck","P","g","Any serve","","0,0,0,0"],
+["Eggs","P","g","2 eggs","","0,0,0,0"],
+["Fish (All Fresh)","P","g","Any serve","Plain, unprocessed","0,0,0,0"],
+["Ham","P","g","1 slice (50g)","Check for garlic/onion","0,0,0,0"],
+["Lamb","P","g","Any serve","","0,0,0,0"],
+["Lobster","P","g","Any serve","","0,0,0,0"],
+["Mussels","P","g","Any serve","","0,0,0,0"],
+["Oysters","P","g","Any serve","","0,0,0,0"],
+["Pork","P","g","Any serve","","0,0,0,0"],
+["Prawns (Shrimp)","P","g","Any serve","","0,0,0,0"],
+["Salmon","P","g","Any serve","","0,0,0,0"],
+["Scallops","P","g","Any serve","","0,0,0,0"],
+["Squid","P","g","Any serve","","0,0,0,0"],
+["Tempeh","P","g","100g","","0,0,0,0"],
+["Tofu (Firm)","P","g","⅔ cup (160g)","Firm/extra firm only","0,0,0,0"],
+["Tofu (Silken)","P","a","⅓ cup (55g)","Contains GOS","1,0,0,0"],
+["Tuna","P","g","Any serve","","0,0,0,0"],
+["Turkey","P","g","Any serve","","0,0,0,0"],
+["Baked Beans","L","r","","High in GOS and fructans","3,0,0,0"],
+["Black Beans","L","r","","High in GOS","3,0,0,0"],
+["Butter Beans","L","r","","High in GOS","3,0,0,0"],
+["Cannellini Beans","L","a","¼ cup (45g)","Low in small amounts","1,0,0,0"],
+["Chickpeas (Canned)","L","a","¼ cup (42g)","Canning reduces GOS","1,0,0,0"],
+["Chickpeas (Dried)","L","r","","High in GOS and fructans","3,0,0,0"],
+["Kidney Beans","L","r","","High in GOS","3,0,0,0"],
+["Lentils (Canned)","L","a","½ cup (46g)","Canning reduces GOS","1,0,0,0"],
+["Lentils (Dried)","L","r","","High in GOS","3,0,0,0"],
+["Soybeans","L","r","","High in GOS and fructans","3,0,0,0"],
+["Split Peas","L","r","","High in GOS","3,0,0,0"],
+["Butter","D","g","1 tbsp (20g)","Very low in lactose","0,0,0,0"],
+["Cheese (Brie/Camembert)","D","g","2 slices (40g)","","0,0,0,0"],
+["Cheese (Cheddar)","D","g","2 slices (40g)","Aged, low in lactose","0,0,0,0"],
+["Cheese (Cottage)","D","a","2 tbsp (36g)","Lactose in larger serves","0,0,0,2"],
+["Cheese (Cream)","D","a","2 tbsp (30g)","Lactose in larger serves","0,0,0,1"],
+["Cheese (Feta)","D","g","½ cup (60g)","","0,0,0,0"],
+["Cheese (Gouda/Swiss)","D","g","2 slices (40g)","","0,0,0,0"],
+["Cheese (Haloumi)","D","g","2 slices (40g)","","0,0,0,0"],
+["Cheese (Mozzarella)","D","g","½ cup (60g)","","0,0,0,0"],
+["Cheese (Parmesan)","D","g","2 tbsp (20g)","Very low in lactose","0,0,0,0"],
+["Cheese (Ricotta)","D","a","2 tbsp (40g)","Contains lactose","0,0,0,2"],
+["Cream (Heavy/Double)","D","g","2 tbsp (30ml)","","0,0,0,0"],
+["Cream (Sour)","D","a","2 tbsp (30ml)","Some lactose","0,0,0,1"],
+["Crème Fraîche","D","g","2 tbsp (30ml)","","0,0,0,0"],
+["Ghee","D","g","1 tbsp","Virtually no lactose","0,0,0,0"],
+["Ice Cream (Regular)","D","r","","High in lactose","0,0,0,3"],
+["Ice Cream (Lactose Free)","D","g","½ cup (75g)","","0,0,0,0"],
+["Milk (Cow's)","D","r","","High in lactose","0,0,0,3"],
+["Milk (Almond)","D","g","1 cup (250ml)","","0,0,0,0"],
+["Milk (Coconut)","D","g","1 cup (250ml)","","0,0,0,0"],
+["Milk (Lactose Free)","D","g","1 cup (250ml)","","0,0,0,0"],
+["Milk (Oat)","D","a","½ cup (125ml)","GOS in larger serves","1,0,0,0"],
+["Milk (Rice)","D","g","1 cup (250ml)","","0,0,0,0"],
+["Milk (Soy - Protein)","D","g","1 cup (250ml)","From soy protein, not whole beans","0,0,0,0"],
+["Milk (Soy - Whole Bean)","D","r","","High in GOS","3,0,0,0"],
+["Yogurt (Regular)","D","r","","High in lactose","0,0,0,3"],
+["Yogurt (Greek)","D","a","¾ cup (170g)","Lower in lactose","0,0,0,1"],
+["Yogurt (Coconut)","D","g","¾ cup (170g)","","0,0,0,0"],
+["Yogurt (Lactose Free)","D","g","¾ cup (170g)","","0,0,0,0"],
+["Almonds","N","a","10 nuts (12g)","GOS in larger serves","1,0,0,0"],
+["Brazil Nuts","N","g","10 nuts (20g)","","0,0,0,0"],
+["Cashews","N","r","","High in GOS","3,0,0,0"],
+["Chia Seeds","N","g","2 tbsp (24g)","","0,0,0,0"],
+["Flaxseed","N","g","1 tbsp (12g)","","0,0,0,0"],
+["Hazelnuts","N","a","10 nuts (15g)","Fructans in larger serves","1,0,0,0"],
+["Hemp Seeds","N","g","2 tbsp (20g)","","0,0,0,0"],
+["Macadamia Nuts","N","g","20 nuts (20g)","","0,0,0,0"],
+["Peanuts","N","g","32 nuts (28g)","","0,0,0,0"],
+["Peanut Butter","N","g","2 tbsp (32g)","","0,0,0,0"],
+["Pecans","N","g","10 halves (20g)","","0,0,0,0"],
+["Pine Nuts","N","g","1 tbsp (14g)","","0,0,0,0"],
+["Pistachio","N","r","","High in fructans and GOS","3,0,0,0"],
+["Pumpkin Seeds","N","g","2 tbsp (25g)","","0,0,0,0"],
+["Sesame Seeds","N","g","1 tbsp (12g)","","0,0,0,0"],
+["Sunflower Seeds","N","g","2 tbsp (16g)","","0,0,0,0"],
+["Tahini","N","g","1 tbsp (15g)","","0,0,0,0"],
+["Walnuts","N","g","10 halves (20g)","","0,0,0,0"],
+["Asafoetida","C","g","1 tsp","Great garlic/onion substitute","0,0,0,0"],
+["Basil","C","g","1 cup","","0,0,0,0"],
+["Cinnamon","C","g","1 tsp","","0,0,0,0"],
+["Coriander (Cilantro)","C","g","1 cup","","0,0,0,0"],
+["Cumin","C","g","1 tsp","","0,0,0,0"],
+["Curry Powder","C","g","1 tsp","Check for garlic/onion","0,0,0,0"],
+["Fish Sauce","C","g","1 tbsp","","0,0,0,0"],
+["Garlic-Infused Oil","C","g","1 tbsp","FODMAPs not oil soluble. Safe!","0,0,0,0"],
+["Ketchup","C","g","1 sachet (13g)","Check for HFCS/onion","0,0,0,0"],
+["Lemongrass","C","g","1 stalk","","0,0,0,0"],
+["Maple Syrup","C","g","2 tbsp","","0,0,0,0"],
+["Mayonnaise","C","g","2 tbsp","Check for garlic/onion","0,0,0,0"],
+["Mint","C","g","1 cup","","0,0,0,0"],
+["Miso Paste","C","g","2 tbsp","","0,0,0,0"],
+["Mustard","C","g","1 tbsp","","0,0,0,0"],
+["Olive Oil","C","g","1 tbsp","","0,0,0,0"],
+["Oregano","C","g","1 tsp","","0,0,0,0"],
+["Oyster Sauce","C","g","1 tbsp","","0,0,0,0"],
+["Paprika","C","g","1 tsp","","0,0,0,0"],
+["Parsley","C","g","1 cup","","0,0,0,0"],
+["Pepper (Black)","C","g","1 tsp","","0,0,0,0"],
+["Rice Malt Syrup","C","g","1 tbsp","","0,0,0,0"],
+["Rosemary","C","g","1 tsp","","0,0,0,0"],
+["Salt","C","g","1 tsp","","0,0,0,0"],
+["Soy Sauce","C","g","2 tbsp","Low FODMAP despite soy origin","0,0,0,0"],
+["Stock Cubes","C","a","Check label","Many contain onion/garlic","2,0,0,0"],
+["Sugar (All)","C","g","1 tbsp","Sucrose is low FODMAP","0,0,0,0"],
+["Tamari","C","g","2 tbsp","","0,0,0,0"],
+["Thyme","C","g","1 tsp","","0,0,0,0"],
+["Turmeric","C","g","1 tsp","","0,0,0,0"],
+["Vanilla Extract","C","g","1 tsp","","0,0,0,0"],
+["Vinegar (All Types)","C","g","2 tbsp","","0,0,0,0"],
+["Worcestershire Sauce","C","g","2 tbsp","","0,0,0,0"],
+["Agave Syrup","S","r","","Very high in fructose","0,3,0,0"],
+["Erythritol","S","g","1 tsp","","0,0,0,0"],
+["Golden Syrup","S","g","1 tbsp","","0,0,0,0"],
+["HFCS","S","r","","Very high in fructose","0,3,0,0"],
+["Honey","S","r","","High in fructose","0,3,0,0"],
+["Inulin","S","r","","High in fructans","3,0,0,0"],
+["Isomalt","S","r","","High in polyols","0,0,3,0"],
+["Maltitol","S","r","","High in polyols","0,0,3,0"],
+["Sorbitol","S","r","","High in polyols","0,0,3,0"],
+["Stevia","S","g","2 sachets","","0,0,0,0"],
+["Xylitol","S","r","","High in polyols","0,0,3,0"],
+["Beer","B","g","1 bottle (375ml)","","0,0,0,0"],
+["Coffee (Black)","B","g","1 cup","","0,0,0,0"],
+["Cranberry Juice","B","g","1 cup","","0,0,0,0"],
+["Juice (Apple)","B","r","","High in fructose","0,3,2,0"],
+["Juice (Orange)","B","g","½ cup (125ml)","","0,0,0,0"],
+["Juice (Pear)","B","r","","High in fructose and sorbitol","0,3,3,0"],
+["Gin","B","g","1 shot (30ml)","","0,0,0,0"],
+["Green Tea","B","g","1 cup","","0,0,0,0"],
+["Peppermint Tea","B","g","1 cup","","0,0,0,0"],
+["Soda Water","B","g","1 cup","","0,0,0,0"],
+["Tea (Black)","B","g","1 cup","","0,0,0,0"],
+["Vodka","B","g","1 shot","","0,0,0,0"],
+["Water","B","g","Any","","0,0,0,0"],
+["Whisky","B","g","1 shot","","0,0,0,0"],
+["Wine (All)","B","g","1 glass (150ml)","","0,0,0,0"],
+["Chocolate (Dark 70%+)","K","g","3 squares (30g)","Check for sweeteners","0,0,0,0"],
+["Chocolate (Milk)","K","a","4 squares (20g)","Some lactose","0,0,0,1"],
+["Popcorn","K","g","4 cups popped","","0,0,0,0"],
+["Potato Chips (Plain)","K","g","28g","Check for onion/garlic","0,0,0,0"],
+["Rice Crackers","K","g","10 crackers (30g)","","0,0,0,0"],
+["Tortilla Chips","K","g","30g","","0,0,0,0"]
+];
+var CM={V:"Vegetables",F:"Fruits",G:"Grains",P:"Protein",L:"Legumes",D:"Dairy",N:"Nuts & Seeds",C:"Condiments",S:"Sweeteners",B:"Drinks",K:"Snacks"};
+var CATS=["All","Vegetables","Fruits","Grains","Protein","Legumes","Dairy","Nuts & Seeds","Condiments","Sweeteners","Drinks","Snacks"];
+var RC={g:"#16a34a",a:"#d97706",r:"#dc2626"};
+var RBG={g:"#f0fdf4",a:"#fffbeb",r:"#fef2f2"};
+var RBR={g:"#bbf7d0",a:"#fde68a",r:"#fecaca"};
+var RL={g:"Low FODMAP",a:"Moderate",r:"High FODMAP"};
+var RE={g:"✅",a:"⚠️",r:"🔴"};
+var FL=["Oligos","Fructose","Polyols","Lactose"];
+
+var foods=D.map(function(d){return{name:d[0],cat:CM[d[1]]||d[1],rating:d[2],serving:d[3],notes:d[4],fodmap:d[5].split(",").map(Number)};});
+foods.sort(function(a,b){return a.name.localeCompare(b.name);});
+
+var curCat="All",curFilter="all",curQ="";
+
+document.getElementById("total-count").textContent=foods.length+" foods · Tap any food for details";
+
+// Category pills
+var catList=document.getElementById("cat-list");
+CATS.forEach(function(c){
+  var b=document.createElement("button");
+  b.className="cat-pill"+(c==="All"?" on":"");
+  b.textContent=c;
+  b.onclick=function(){curCat=c;document.getElementById("cat-label").textContent=c==="All"?"All Categories":c;catList.classList.add("hidden");document.getElementById("cat-arrow").textContent="▼";document.querySelectorAll(".cat-pill").forEach(function(p){p.className="cat-pill"+(p.textContent===c?" on":"");});render();};
+  catList.appendChild(b);
+});
+
+document.getElementById("cat-toggle").onclick=function(){
+  var cl=catList.classList;
+  if(cl.contains("hidden")){cl.remove("hidden");document.getElementById("cat-arrow").textContent="▲";}
+  else{cl.add("hidden");document.getElementById("cat-arrow").textContent="▼";}
+};
+
+// Filter buttons
+var filterDefs=[["all","All","#6366f1","#eef2ff"],["g","Low","#16a34a","#f0fdf4"],["a","Mod","#d97706","#fffbeb"],["r","High","#dc2626","#fef2f2"]];
+var filtersEl=document.getElementById("filters");
+filterDefs.forEach(function(fd){
+  var b=document.createElement("button");
+  b.className="fbtn";b.dataset.key=fd[0];
+  b.onclick=function(){curFilter=fd[0];render();};
+  filtersEl.appendChild(b);
+});
+
+document.getElementById("search").oninput=function(e){curQ=e.target.value.toLowerCase();render();};
+
+function getFiltered(){
+  var r=foods;
+  if(curCat!=="All")r=r.filter(function(f){return f.cat===curCat;});
+  if(curQ)r=r.filter(function(f){return f.name.toLowerCase().indexOf(curQ)!==-1;});
+  return r;
+}
+
+function render(){
+  var base=getFiltered();
+  var counts={all:base.length,g:0,a:0,r:0};
+  base.forEach(function(f){counts[f.rating]++;});
+
+  // Update filter buttons
+  filtersEl.querySelectorAll(".fbtn").forEach(function(b){
+    var k=b.dataset.key;
+    var def=filterDefs.find(function(d){return d[0]===k;});
+    var ct=counts[k]||0;
+    b.textContent=def[1]+" ("+ct+")";
+    if(curFilter===k){b.style.borderColor=def[2];b.style.borderWidth="2px";b.style.background=def[3];b.style.color=def[2];}
+    else{b.style.borderColor="#e2e8f0";b.style.borderWidth="1px";b.style.background="#fff";b.style.color="#94a3b8";}
+  });
+
+  var filtered=base;
+  if(curFilter!=="all")filtered=base.filter(function(f){return f.rating===curFilter;});
+
+  var list=document.getElementById("list");
+  list.innerHTML="";
+  if(filtered.length===0){list.innerHTML='<div class="empty">No foods found</div>';return;}
+
+  filtered.forEach(function(f,i){
+    var row=document.createElement("button");
+    row.className="row";
+    row.innerHTML='<div class="dot" style="background:'+RC[f.rating]+'"></div><div style="flex:1;min-width:0"><div class="row-name">'+f.name+'</div>'+(f.serving?'<div class="row-serve">'+f.serving+'</div>':'')+'</div><span class="row-arr">›</span>';
+    row.onclick=function(){showDetail(f);};
+    list.appendChild(row);
+  });
+}
+
+function makeDots(val){
+  var h='<div class="dots">';
+  for(var i=1;i<=3;i++){
+    var cls=val>=i?(val>=2?"on"+val:"on1"):"";
+    h+='<span class="'+cls+'"></span>';
+  }
+  return h+'</div>';
+}
+
+function showDetail(f){
+  document.getElementById("hdr").classList.add("hidden");
+  document.getElementById("cat-bar").classList.add("hidden");
+  document.getElementById("filters").classList.add("hidden");
+  document.getElementById("list").classList.add("hidden");
+  document.getElementById("list-footer").classList.add("hidden");
+  var d=document.getElementById("detail");
+  d.classList.remove("hidden");
+
+  var html='<button class="back-btn" id="back-btn">← Back</button>';
+  html+='<div class="detail-card" style="background:'+RBG[f.rating]+';border:1.5px solid '+RBR[f.rating]+'">';
+  html+='<div class="detail-head"><span class="detail-emoji">'+RE[f.rating]+'</span><div><div class="detail-name">'+f.name+'</div><div class="detail-rating" style="color:'+RC[f.rating]+'">'+RL[f.rating]+'</div></div></div>';
+  html+='<div class="detail-cat">Category: '+f.cat+'</div>';
+  if(f.serving)html+='<div class="detail-serve"><b>Safe serving:</b> '+f.serving+'</div>';
+  if(f.notes)html+='<div class="detail-notes">'+f.notes+'</div>';
+  html+='</div>';
+
+  html+='<div class="breakdown"><div class="breakdown-title">FODMAP Breakdown</div>';
+  FL.forEach(function(label,i){
+    html+='<div class="brow"><span class="brow-label">'+label+'</span>'+makeDots(f.fodmap[i])+'</div>';
+  });
+  html+='</div>';
+
+  html+='<div class="disclaimer"><b>Disclaimer</b><p>For educational purposes only. Consult a doctor or dietitian before making changes to your diet.</p></div>';
+
+  d.innerHTML=html;
+  d.scrollTop=0;
+  document.getElementById("back-btn").onclick=hideDetail;
+}
+
+function hideDetail(){
+  document.getElementById("detail").classList.add("hidden");
+  document.getElementById("hdr").classList.remove("hidden");
+  document.getElementById("cat-bar").classList.remove("hidden");
+  document.getElementById("filters").classList.remove("hidden");
+  document.getElementById("list").classList.remove("hidden");
+  document.getElementById("list-footer").classList.remove("hidden");
+}
+
+render();
+</script>
+</body>
+</html>
